@@ -97,8 +97,7 @@ const loop = (curr_time) => {
   requestAnimationFrame(loop);
 }
 
-
-const main = () => {
+const image_animation = () => {
   canvas.width = width;
   canvas.height = height;
 
@@ -134,4 +133,21 @@ const main = () => {
   requestAnimationFrame(loop);
 }
 
-main();
+const check_currently_playing = async () => {
+  try {
+    const response = await fetch("/api/now-playing");
+    const data = await response.json();
+    const container = document.getElementById("currently-playing");
+    const label = container.querySelector("p");
+    if (data.is_playing) {
+      container.style.display = "flex";
+      container.classList.add("fade-in");
+      label.innerHTML = `Currently playing <a href="${data.songUrl}" target="_blank">${data.title}</a> - ${data.artist}`;
+    }
+  } catch (e) {
+    console.error(e);
+  }
+}
+
+image_animation();
+check_currently_playing()

@@ -17,35 +17,13 @@ body {
   overflow: hidden;
 }
 
-.content {
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-}
-
-.content canvas {
-  margin-bottom: -10px;
-  margin-top: -50px;
-}
-
-.content h1 {
-  margin: 0;
-}
-
-.content p {
-  width: 80vw;
-  text-align: center;
-}
-
-.content a {
+a {
   position: relative;
   display: inline-block;
   z-index: 1;
 }
 
-.content a::after {
+a::after {
   content: "";
   position: absolute;
   top: 0;
@@ -59,8 +37,46 @@ body {
   transition: transform 0.1s ease-in-out;
 }
 
-.content a:hover::after {
+a:hover::after {
   transform: scaleX(1);
+}
+
+.content {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+.content canvas {
+  margin-bottom: -10px;
+  margin-top: -50px;
+}
+
+.content h1 {
+  margin: 0;
+}
+
+.content p {
+  width: 80%;
+  text-align: center;
+}
+
+#currently-playing {
+  position: absolute;
+  bottom: 10px;
+  left: 50%;
+  display: none;
+  transform: translateX(-50%);
+  align-items: center;
+  width: auto;
+}
+
+#currently-playing img {
+  width: 18px;
+  margin-right: 10px;
 }
 
 .fade-in {

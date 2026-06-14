@@ -142,7 +142,7 @@ const check_currently_playing = async () => {
     if (data.is_playing) {
       container.style.display = "flex";
       container.classList.add("fade-in");
-      label.innerHTML = `Currently playing <a href="${data.songUrl}" target="_blank">${data.title}</a> - ${data.artist}`;
+      label.innerHTML = `Currently playing <a href="${data.song_url}" target="_blank">${data.title}</a> - ${data.artist}`;
     }
   } catch (e) {
     console.error(e);

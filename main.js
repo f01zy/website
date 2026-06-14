@@ -39,6 +39,7 @@ const mouse_power = 3000;
 const friction = 0.85;
 
 // Utility
+const source_link = "https://github.com/f01zy/website"
 const canvas = document.querySelector("canvas");
 const ctx = canvas.getContext("2d");
 const particles = [];
@@ -137,13 +138,19 @@ const check_currently_playing = async () => {
   try {
     const response = await fetch("/api/now-playing");
     const data = await response.json();
-    const container = document.getElementById("currently-playing");
-    const label = container.querySelector("p");
+    const footer = document.querySelector("footer");
+    const label = document.createElement("p");
     if (data.is_playing) {
-      container.style.display = "flex";
-      container.classList.add("fade-in");
+      const image = document.createElement("img");
+      image.src = "assets/spotify.svg";
+      footer.appendChild(image);
       label.innerHTML = `Currently playing <a href="${data.song_url}" target="_blank">${data.title}</a> - ${data.artist}`;
+    } else {
+      label.innerHTML = `<a href="${source_link}" target="_blank">source</a>`
     }
+    footer.appendChild(label);
+    footer.style.display = "flex";
+    footer.classList.add("fade-in");
   } catch (e) {
     console.error(e);
   }

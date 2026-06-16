@@ -144,7 +144,7 @@ const check_currently_playing = async () => {
       const image = document.createElement("img");
       image.src = "assets/spotify.svg";
       footer.appendChild(image);
-      label.innerHTML = `Currently playing <a href="${data.song_url}" target="_blank">${data.title}</a> - ${data.artist}`;
+      label.innerHTML = `Currently listening <a href="${data.song_url}" target="_blank">${data.title}</a> - ${data.artist}`;
     } else {
       label.innerHTML = `<a href="${source_link}" target="_blank">source</a>`
     }

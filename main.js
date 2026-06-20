@@ -23,8 +23,8 @@ const image = [
 ];
 
 // Styles
-const width = window.innerWidth;
-const height = 300;
+const canvas_width = window.innerWidth;
+const canvas_height = 300;
 const font_size = 10;
 const char_space_x = 2;
 const char_space_y = 4;
@@ -38,9 +38,14 @@ const mouse_radius = 150;
 const mouse_power = 3000;
 const friction = 0.85;
 
+// Elements
+const canvas = document.querySelector("canvas");
+const home = document.getElementsByClassName("home")[0];
+const projects = document.getElementsByClassName("projects")[0];
+const not_found = document.getElementsByClassName("not-found")[0];
+
 // Utility
 const source_link = "https://github.com/f01zy/website"
-const canvas = document.querySelector("canvas");
 const ctx = canvas.getContext("2d");
 const particles = [];
 let last_time = 0;
@@ -51,14 +56,17 @@ document.addEventListener("mousemove", (ev) => {
   const rect = canvas.getBoundingClientRect();
   cursor_x = ev.clientX - rect.left;
   cursor_y = ev.clientY - rect.top;
-})
+});
+
+document.getElementById("go-back").addEventListener("click", (e) => {
+  history.back();
+});
 
 const loop = (curr_time) => {
   if (!last_time) last_time = curr_time;
   const delta_time = (curr_time - last_time) / 1000;
   last_time = curr_time;
   ctx.clearRect(0, 0, canvas.width, canvas.height);
-
   ctx.fillStyle = "#fafafa";
   ctx.font = `${font_size}px Cormorant Garamond`;
   ctx.textAlign = "left";
@@ -69,13 +77,12 @@ const loop = (curr_time) => {
     const spring_dy = particle.targetY - particle.y;
     const spring_force_x = spring_dx * spring_coefficient;
     const spring_force_y = spring_dy * spring_coefficient;
-
     const cursor_dx = particle.x - cursor_x;
     const cursor_dy = particle.y - cursor_y;
     const cursor_distance = Math.sqrt(cursor_dx * cursor_dx + cursor_dy * cursor_dy);
-
     let cursor_force_x = 0;
     let cursor_force_y = 0;
+
     if (cursor_distance > 0 && cursor_distance < mouse_radius) {
       const force_intensity = (mouse_radius - cursor_distance) / mouse_radius;
       cursor_force_x = (cursor_dx / cursor_distance) * force_intensity * mouse_power;
@@ -86,12 +93,10 @@ const loop = (curr_time) => {
     const total_force_y = spring_force_y + cursor_force_y;
     const acceleration_x = total_force_x / particle_weight;
     const acceleration_y = total_force_y / particle_weight;
-
     particle.velocity_x = (particle.velocity_x + acceleration_x * delta_time) * friction;
     particle.velocity_y = (particle.velocity_y + acceleration_y * delta_time) * friction;
     particle.x += particle.velocity_x * delta_time;
     particle.y += particle.velocity_y * delta_time;
-
     ctx.fillText(particle.char, particle.x, particle.y);
   })
 
@@ -99,9 +104,8 @@ const loop = (curr_time) => {
 }
 
 const image_animation = () => {
-  canvas.width = width;
-  canvas.height = height;
-
+  canvas.width = canvas_width;
+  canvas.height = canvas_height;
   const metrics = ctx.measureText(' ');
   const char_width = metrics.width + char_space_x;
   const char_height = font_size + char_space_y;
@@ -134,6 +138,38 @@ const image_animation = () => {
   requestAnimationFrame(loop);
 }
 
+const load_projects = async () => {
+  const response = await fetch("/api/projects")
+  const data = await response.json();
+  for (const project of data) {
+    const container = document.createElement("div");
+    container.classList.add("project");
+
+    const title = document.createElement("a");
+    title.innerHTML = project.title;
+    title.href = project.link;
+    title.target = "_blank";
+
+    const description = document.createElement("p");
+    description.innerHTML = project.description;
+
+    const tags = document.createElement("p");
+    tags.classList.add("tags");
+    if (project.tags) {
+      const arr = project.tags.split(",");
+      arr.forEach(text => {
+        const tag = document.createElement("span");
+        tag.classList.add("tag");
+        tag.textContent = text.trim();
+        tags.append(tag);
+      });
+    }
+
+    container.append(title, description, tags);
+    projects.append(container);
+  }
+}
+
 const check_currently_playing = async () => {
   try {
     const response = await fetch("/api/now-playing");
@@ -156,5 +192,19 @@ const check_currently_playing = async () => {
   }
 }
 
-image_animation();
+const show_element = (element) => {
+  element.classList.add("fade-in");
+  element.classList.remove("none");
+}
+
+if (window.location.pathname == "/") {
+  show_element(home);
+  image_animation();
+} else if (window.location.pathname == "/projects") {
+  show_element(projects);
+  load_projects();
+} else {
+  show_element(not_found);
+}
+
 check_currently_playing()

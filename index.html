@@ -1,39 +1,65 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>f01zy</title>
+    <link rel="stylesheet" href="/style.css" />
+    <link rel="icon" href="assets/favicon.png" type="image/png" sizes="32x32" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.1.6/purify.min.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js" defer></script>
+    <script src="/main.js" defer></script>
+  </head>
 
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>f01zy</title>
-  <link rel="stylesheet" href="style.css">
-  <link rel="icon" href="assets/favicon.png" type="image/png" sizes="32x32">
-  <script src="main.js" defer></script>
-</head>
+  <body>
+    <nav>
+      <a href="/">Home</a>
+      <a href="/projects">Projects</a>
+      <a href="/posts">Posts</a>
+    </nav>
 
-<body>
-  <nav>
-    <a href="/">Home</a>
-    <a href="/projects">Projects</a>
-    <a href="/blog">Blog</a>
-  </nav>
-  <div class="home none">
-    <canvas></canvas>
-    <h1>f01zy</h1>
-    <p>Hi, I'm f01zy. I develop terminal utilities and low-level software in C under Linux. Outside of coding, I enjoy
-      reading light novels and playing chess.</p>
-    <div>
-      <a href="https://github.com/f01zy" placeholder="github" target="_blank">github</a> |
-      <a href="https://discord.com/users/858285755658666034" target="_blank">discord</a> |
-      <a href="https://anilist.co/user/f01zy/" target="_blank">anilist</a> |
-      <a href="assets/gpg.asc" download>gpg</a>
+    <div class="home container not-scrollable none">
+      <canvas></canvas>
+      <h1>f01zy</h1>
+      <p>
+        Hi, I'm f01zy. I develop terminal utilities and low-level software in C under Linux. Outside of coding, I enjoy reading light novels and playing chess.
+      </p>
+      <div class="links"></div>
     </div>
-  </div>
-  <div class="projects none"></div>
-  <div class="not-found none">
-    <h2>Not Found</h2>
-    <a href="/" id="go-back">go back</a>
-  </div>
-  <footer></footer>
-</body>
 
+    <div class="projects container blocks none"></div>
+    <div class="posts container blocks none"></div>
+    <div class="post container scrollable none"></div>
+
+    <div class="new-post container not-scrollable none">
+      <form class="post-form">
+        <h2>New post</h2>
+        <p class="status-message none"></p>
+        <div class="form-group">
+          <input type="text" name="title" class="form-input" placeholder="Title" required />
+        </div>
+        <div class="form-group">
+          <input type="text" name="preview" class="form-input" placeholder="Preview" required />
+        </div>
+        <div class="form-group">
+          <textarea name="content" class="form-textarea" placeholder="Some text..." rows="4" required></textarea>
+        </div>
+        <button type="submit" class="form-submit">
+          <span>Publish</span>
+        </button>
+      </form>
+    </div>
+
+    <div class="empty container not-scrollable none">
+      <h2>Empty</h2>
+      <p>It's empty here for now <span>(the sound of tumbleweeds)</span>.</p>
+    </div>
+
+    <div class="not-found container not-scrollable none">
+      <h2>Not Found</h2>
+      <a class="back-link" href="/">go back</a>
+    </div>
+
+    <footer></footer>
+  </body>
 </html>

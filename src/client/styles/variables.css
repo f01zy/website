@@ -11,11 +11,10 @@
   --border-main: #1a1a1a;
   --border-element: #222436;
   --shadow-main: 0 4px 30px rgba(0, 0, 0, 0.4);
-  --height-header: 40px;
-  --height-footer: 40px;
+  --height-header: 50px;
+  --height-footer: 50px;
   --width-content-max: 900px;
-  --width-form-max: 600px;
-  --height-content-max: calc(100vh - var(--height-header) - var(--height-footer) - 40px);
+  --width-form-max: 800px;
   --gap-large: 24px;
   --gap-medium: 20px;
   --gap-small: 8px;

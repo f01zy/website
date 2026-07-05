@@ -20,7 +20,6 @@ const image = [
   "⢀⣠⠁⠈⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀",
 ];
 
-// Styles
 const canvas_width = window.innerWidth;
 const canvas_height = 300;
 const font_size = 10;
@@ -29,14 +28,12 @@ const char_space_y = 4;
 const image_offset_x = 25;
 const image_offset_y = 0;
 
-// Physics
 const spring_coefficient = 150;
 const particle_weight = 1.0;
 const mouse_radius = 150;
 const mouse_power = 6000;
 const friction = 0.85;
 
-// Elements
 const canvas = document.querySelector("canvas");
 const home_section = document.querySelector(".home");
 const links_container = home_section.querySelector(".links");
@@ -50,7 +47,6 @@ const not_found_section = document.querySelector(".not-found");
 const go_back_button = not_found_section.querySelector(".back-link");
 const empty_section = document.querySelector(".empty");
 
-// Utility
 const source_link = "https://github.com/f01zy/website";
 const ctx = canvas.getContext("2d");
 const particles = [];
@@ -118,8 +114,8 @@ const loop = (curr_time) => {
   ctx.textBaseline = "top";
 
   particles.forEach((particle) => {
-    const spring_dx = particle.targetX - particle.x;
-    const spring_dy = particle.targetY - particle.y;
+    const spring_dx = particle.target_x - particle.x;
+    const spring_dy = particle.target_y - particle.y;
     const spring_force_x = spring_dx * spring_coefficient;
     const spring_force_y = spring_dy * spring_coefficient;
     const cursor_dx = particle.x - cursor_x;
@@ -157,21 +153,21 @@ const image_animation = () => {
   const max_row_length = Math.max(...image.map((row) => row.length));
   const total_image_width = max_row_length * char_width;
   const total_image_height = image.length * char_height;
-  const startX = canvas.width / 2 - total_image_width / 2 + image_offset_x;
-  const startY = canvas.height / 2 - total_image_height / 2 + image_offset_y;
+  const start_x = canvas.width / 2 - total_image_width / 2 + image_offset_x;
+  const start_y = canvas.height / 2 - total_image_height / 2 + image_offset_y;
 
   image.forEach((row, i) => {
     for (let j = 0; j < row.length; j++) {
       const char = row[j];
       if (char != " ") {
-        const targetX = startX + j * char_width;
-        const targetY = startY + i * char_height;
+        const target_x = start_x + j * char_width;
+        const target_y = start_y + i * char_height;
         const particle = {
           char,
-          x: targetX,
-          y: targetY,
-          targetX,
-          targetY,
+          x: target_x,
+          y: target_y,
+          target_x,
+          target_y,
           velocity_x: 0,
           velocity_y: 0,
         };
@@ -272,7 +268,7 @@ const load_post = async (slug) => {
     date_span.textContent = new Date(post_data.created_at).toLocaleDateString();
     meta_container.append(date_span);
     hr.classList.add("post-divider");
-    content_container.classList.add("post-content");
+    content_container.classList.add("post-content", "markdown-body");
     content_container.innerHTML = clean_content;
 
     post_container.append(title, meta_container, hr, content_container);
@@ -350,7 +346,7 @@ const show_element = (element) => {
   element.classList.remove("none");
 };
 
-const pathname = window.location.pathname;
+const pathname = decodeURIComponent(window.location.pathname);
 const routes = [
   {
     path: "/",
@@ -364,7 +360,7 @@ const routes = [
   { path: "/posts/new", action: () => show_element(new_post_section) },
   { path: "/posts", action: () => load_posts() },
   {
-    path: /^\/posts\/([a-zA-Z0-9_-]+)$/,
+    path: /^\/posts\/([a-zA-Zа-яА-ЯёЁ0-9_-]+)$/,
     action: (match) => load_post(match[1]),
   },
 ];

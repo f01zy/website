@@ -1,43 +1,5 @@
 @import url("https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300..700;1,300..700&display=swap");
 
-:root {
-  --bg-main: #010101;
-  --bg-surface: #080808;
-  --bg-element: #16161e;
-  --text-main: #fafafa;
-  --text-muted: #a0a8cd;
-  --color-accent: red;
-  --color-accent-muted: rgba(255, 0, 0, 0.3);
-  --color-success: green;
-  --color-error: red;
-  --border-main: #1a1a1a;
-  --border-element: #222436;
-  --shadow-main: 0 4px 30px rgba(0, 0, 0, 0.4);
-  --height-header: 40px;
-  --height-footer: 40px;
-  --width-content-max: 900px;
-  --width-form-max: 600px;
-  --height-content-max: calc(100vh - var(--height-header) - var(--height-footer) - 40px);
-  --gap-large: 24px;
-  --gap-medium: 20px;
-  --gap-small: 8px;
-  --gap-minimal: 4px;
-  --padding-viewport: 10px 0px;
-  --padding-container: 10px 20px;
-  --padding-block: 24px;
-  --padding-element: 2px 10px;
-  --padding-input: 10px 16px;
-  --radius-main: 4px;
-  --font-size-large: 22.4px;
-  --font-size-medium: 16px;
-  --font-size-small: 11.2px;
-  --speed-fast: 0.1s ease-in-out;
-  --speed-normal: 0.2s ease;
-  --speed-fade: 0.5s ease-in-out;
-}
-
-/* UNIQUE */
-
 * {
   font-family: "Cormorant Garamond", serif;
   font-optical-sizing: auto;
@@ -281,8 +243,6 @@ footer img {
   width: 15px;
   margin-right: 10px;
 }
-
-/* GENERAL */
 
 ::selection {
   background: var(--color-accent);

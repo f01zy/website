@@ -4,11 +4,13 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>f01zy</title>
-    <link rel="stylesheet" href="/style.css" />
     <link rel="icon" href="assets/favicon.png" type="image/png" sizes="32x32" />
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.1.6/purify.min.js" defer></script>
-    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js" defer></script>
-    <script src="/main.js" defer></script>
+    <link rel="stylesheet" href="/src/variables.css" />
+    <link rel="stylesheet" href="/src/style.css" />
+    <link rel="stylesheet" href="/third_party/markdown.css" />
+    <script src="/third_party/marked.js" defer></script>
+    <script src="/third_party/purify.js" defer></script>
+    <script src="/src/main.js" defer></script>
   </head>
 
   <body>
@@ -18,6 +20,10 @@
       <a href="/posts">Posts</a>
     </nav>
 
+    <div class="projects container blocks none"></div>
+    <div class="posts container blocks none"></div>
+    <div class="post container scrollable none"></div>
+
     <div class="home container not-scrollable none">
       <canvas></canvas>
       <h1>f01zy</h1>
@@ -26,10 +32,6 @@
       </p>
       <div class="links"></div>
     </div>
-
-    <div class="projects container blocks none"></div>
-    <div class="posts container blocks none"></div>
-    <div class="post container scrollable none"></div>
 
     <div class="new-post container not-scrollable none">
       <form class="post-form">

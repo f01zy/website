@@ -7,6 +7,7 @@ const REFRESH_TOKEN = Bun.env.SPOTIFY_REFRESH_TOKEN;
 const ADMIN_PASSWORD = Bun.env.ADMIN_PASSWORD;
 const PORT = Bun.env.PORT;
 const BASIC_AUTH = btoa(`${CLIENT_ID}:${CLIENT_SECRET}`);
+const ROOT_DIR = join(import.meta.dir, "..");
 const db = new Database("db.db");
 
 const get_response_options = (status) => ({
@@ -18,8 +19,9 @@ Bun.serve({
   port: PORT,
   async fetch(req) {
     const url = new URL(req.url);
+    const pathname = decodeURIComponent(url.pathname);
 
-    if (url.pathname === "/api/now-playing" && req.method == "GET") {
+    if (pathname === "/api/now-playing" && req.method === "GET") {
       try {
         const token_response = await fetch("https://accounts.spotify.com/api/token", {
           method: "POST",
@@ -36,7 +38,7 @@ Bun.serve({
         const spotify_response = await fetch("https://api.spotify.com/v1/me/player/currently-playing", {
           headers: { Authorization: `Bearer ${access_token}` },
         });
-        if (spotify_response.status == 204) {
+        if (spotify_response.status === 204) {
           return new Response(JSON.stringify({ isPlaying: false }), get_response_options(200));
         }
         if (spotify_response.status > 400) {
@@ -58,19 +60,20 @@ Bun.serve({
       }
     }
 
-    if (url.pathname == "/api/posts" && req.method == "POST") {
+    if (pathname === "/api/posts" && req.method === "POST") {
       try {
         const body = await req.json();
         const title = body.title;
         const preview = body.preview;
         const content = body.content;
         const password = body.password;
+
         const slug = title
           .toLowerCase()
           .replace(/[^a-z0-9а-яё\s]/g, "")
           .replace(/\s+/g, "-");
 
-        if (password != ADMIN_PASSWORD) {
+        if (password !== ADMIN_PASSWORD) {
           return new Response(JSON.stringify({ error: "The passwords don't match" }), get_response_options(403));
         }
 
@@ -87,13 +90,13 @@ Bun.serve({
       }
     }
 
-    if (url.pathname == "/api/posts" && req.method == "GET") {
+    if (pathname === "/api/posts" && req.method === "GET") {
       const posts = db.prepare("SELECT * FROM posts ORDER BY created_at DESC").all();
       return new Response(JSON.stringify(posts), get_response_options(200));
     }
 
-    if (url.pathname.startsWith("/api/posts/") && url.pathname != "/api/posts" && req.method == "GET") {
-      const slug = url.pathname.replace("/api/posts/", "");
+    if (pathname.startsWith("/api/posts/") && req.method === "GET") {
+      const slug = pathname.replace("/api/posts/", "");
       const post = db.prepare("SELECT * FROM posts WHERE slug = ?").get(slug);
       if (!post) {
         return new Response(JSON.stringify({ error: "Post not found" }), get_response_options(404));
@@ -101,13 +104,15 @@ Bun.serve({
       return new Response(JSON.stringify(post), get_response_options(200));
     }
 
-    if (url.pathname == "/api/projects" && req.method == "GET") {
+    if (pathname === "/api/projects" && req.method === "GET") {
       const projects = db.prepare("SELECT * FROM projects ORDER BY created_at DESC").all();
       return new Response(JSON.stringify(projects), get_response_options(200));
     }
 
-    const file = Bun.file(join(import.meta.dir, url.pathname));
-    if (url.pathname != "/" && (await file.exists())) {
+    const sub_path = pathname.replace(/\.\.\//g, "");
+    const file_path = join(ROOT_DIR, sub_path);
+    const file = Bun.file(file_path);
+    if (pathname !== "/" && (await file.exists())) {
       return new Response(file);
     }
     return new Response(Bun.file(join(import.meta.dir, "index.html")));

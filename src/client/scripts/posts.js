@@ -10,8 +10,36 @@ const empty_section = document.querySelector(".empty");
 
 export const init_post_form = () => {
   if (new_post_form.dataset.initialized) return;
-  const content_textarea = new_post_form.querySelector('textarea[name="content"]');
+  const content_textarea = new_post_form.querySelector(".form-ghost-textarea");
   const image_uploader = document.getElementById("image-uploader");
+  const preview_container = new_post_form.querySelector(".preview-container");
+
+  const toggle_preview = () => {
+    const is_preview_mode = !preview_container.classList.contains("none");
+
+    if (is_preview_mode) {
+      preview_container.classList.add("none");
+      content_textarea.classList.remove("none");
+      content_textarea.focus();
+    } else {
+      let clean_content = content_textarea.value;
+      if (typeof marked !== "undefined" && typeof DOMPurify !== "undefined") {
+        clean_content = DOMPurify.sanitize(marked.parse(content_textarea.value));
+      }
+      preview_container.innerHTML = clean_content || "<i>Nothing to preview...</i>";
+      content_textarea.classList.add("none");
+      preview_container.classList.remove("none");
+    }
+  };
+
+  document.addEventListener("keydown", (e) => {
+    if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "p") {
+      if (!new_post_section.classList.contains("none")) {
+        e.preventDefault();
+        toggle_preview();
+      }
+    }
+  });
 
   if (image_uploader && content_textarea) {
     image_uploader.addEventListener("change", async (e) => {
@@ -39,9 +67,14 @@ export const init_post_form = () => {
         const start_pos = content_textarea.selectionStart;
         const end_pos = content_textarea.selectionEnd;
         const current_text = content_textarea.value;
+
         content_textarea.value = current_text.substring(0, start_pos) + markdown_image + current_text.substring(end_pos);
         content_textarea.focus();
         content_textarea.selectionStart = content_textarea.selectionEnd = start_pos + markdown_image.length;
+
+        if (!preview_container.classList.contains("none") && typeof marked !== "undefined" && typeof DOMPurify !== "undefined") {
+          preview_container.innerHTML = DOMPurify.sanitize(marked.parse(content_textarea.value));
+        }
       } catch (err) {
         alert("Failed to upload image");
         console.error(err);
@@ -54,11 +87,8 @@ export const init_post_form = () => {
   new_post_form.addEventListener("submit", async (e) => {
     e.preventDefault();
     const form_data = new FormData(e.target);
-    const raw_content = form_data.get("content");
-    const content = typeof DOMPurify !== "undefined" ? DOMPurify.sanitize(raw_content) : raw_content;
     const password = prompt("Admin password");
     if (!password) return;
-    form_data.set("content", content);
     form_data.append("password", password);
 
     try {
@@ -70,6 +100,10 @@ export const init_post_form = () => {
       if (res.status === 201) {
         new_post_status.innerHTML = "The post was successfully created";
         new_post_status.className = "status-success";
+        new_post_form.reset();
+        preview_container.innerHTML = "";
+        preview_container.classList.add("none");
+        content_textarea.classList.remove("none");
       } else {
         new_post_status.innerHTML = data.error || "Creation failed";
         new_post_status.className = "status-error";

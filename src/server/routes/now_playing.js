@@ -25,11 +25,15 @@ export async function handle_now_playing(req, method) {
     if (spotify_res.status > 400) return json_response({ error: "Spotify API Error" }, spotify_res.status);
 
     const song = await spotify_res.json();
+    const item = song.item;
     return json_response({
       is_playing: song.is_playing,
-      title: song.item.name,
-      artist: song.item.artists.map((a) => a.name).join(", "),
-      song_url: song.item.external_urls.spotify,
+      title: item.name,
+      song_url: item.external_urls.spotify,
+      artists: item.artists.map((a) => ({
+        name: a.name,
+        url: a.external_urls.spotify,
+      })),
     });
   } catch (err) {
     return json_response({ error: err.message }, 500);

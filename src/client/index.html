@@ -6,12 +6,13 @@
     <title>f01zy</title>
     <link rel="icon" href="assets/favicon.png" type="image/png" sizes="32x32" />
 
-    <!-- STYLES -->
     <link rel="stylesheet" href="/src/client/styles/variables.css" />
+    <link rel="stylesheet" href="/src/client/styles/home.css" />
+    <link rel="stylesheet" href="/src/client/styles/blocks.css" />
+    <link rel="stylesheet" href="/src/client/styles/posts.css" />
     <link rel="stylesheet" href="/src/client/styles/styles.css" />
     <link rel="stylesheet" href="/third_party/markdown.css" />
 
-    <!-- SCRIPTS -->
     <script src="/third_party/marked.js" defer></script>
     <script src="/third_party/purify.js" defer></script>
     <script src="/src/client/scripts/art.js" type="module" defer></script>
@@ -48,22 +49,27 @@
 
         <div class="new-post container not-scrollable none">
           <form class="post-form">
-            <h2>New post</h2>
             <p class="status-message none"></p>
-            <div class="form-group">
-              <input type="text" name="title" class="form-input" placeholder="Title" required />
-            </div>
-            <div class="form-group">
-              <input type="text" name="preview" class="form-input" placeholder="Preview" required />
-            </div>
-            <div class="form-group">
-              <textarea name="content" class="form-textarea" placeholder="Some text..." rows="7" required></textarea>
-            </div>
-            <div class="form-group file-upload-group">
-              <label for="image-uploader" class="form-file-label">
-                <span>Upload images</span>
+            <input type="text" name="title" class="post-title" placeholder="Post Title" required />
+            <div class="post-meta">
+              <label for="image-uploader" class="form-file-label-compact">
+                <span>Upload Image</span>
               </label>
-              <input type="file" name="files" id="image-uploader" class="form-file-input" accept="image/*" multiple />
+              <input type="file" name="files" id="image-uploader" class="form-file-input" accept="image/*" />
+              <input type="text" name="tags" class="form-ghost-input-tags" placeholder="tags, split, by, comma" />
+              <span class="post-date">Draft</span>
+            </div>
+            <hr class="post-divider" />
+            <input type="text" name="preview" class="form-ghost-input-preview" placeholder="Short post preview..." required />
+            <div class="editor-workspace">
+              <textarea
+                name="content"
+                class="form-ghost-textarea"
+                placeholder="Write your story here in Markdown... (Press Ctrl + P to preview)"
+                rows="15"
+                required
+              ></textarea>
+              <div class="preview-container post-content markdown-body none"></div>
             </div>
             <button type="submit" class="form-submit">
               <span>Publish</span>

@@ -36,6 +36,14 @@ const routes = [
   },
 ];
 
+if (typeof marked !== "undefined" && typeof markedKatex !== "undefined") {
+  marked.use(
+    markedKatex({
+      throwOnError: false,
+    }),
+  );
+}
+
 let route_triggered = false;
 for (const route of routes) {
   if (route.path instanceof RegExp) {

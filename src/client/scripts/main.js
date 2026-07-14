@@ -36,12 +36,27 @@ const routes = [
   },
 ];
 
-if (typeof marked !== "undefined" && typeof markedKatex !== "undefined") {
-  marked.use(
-    markedKatex({
-      throwOnError: false,
-    }),
-  );
+if (typeof marked !== "undefined") {
+  if (typeof markedKatex !== "undefined") {
+    marked.use(
+      markedKatex({
+        throwOnError: false,
+      }),
+    );
+  }
+
+  if (typeof markedHighlight !== "undefined" && typeof hljs !== "undefined") {
+    marked.use(
+      markedHighlight.markedHighlight({
+        emptyLangClass: "hljs",
+        langPrefix: "hljs language-",
+        highlight(code, lang) {
+          const language = hljs.getLanguage(lang) ? lang : "plaintext";
+          return hljs.highlight(code, { language }).value;
+        },
+      }),
+    );
+  }
 }
 
 let route_triggered = false;

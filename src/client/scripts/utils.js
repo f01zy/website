@@ -13,7 +13,11 @@ export const create_card = (title_text, link_url, description_text, tags, parent
   title.target = "_blank";
 
   const description = document.createElement("p");
-  description.innerHTML = description_text;
+  let clean_description = description_text;
+  if (typeof DOMPurify !== "undefined") {
+    clean_description = DOMPurify.sanitize(description_text);
+  }
+  description.innerHTML = clean_description;
   container.append(title, description);
 
   if (tags && tags.trim() !== "") {

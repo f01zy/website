@@ -1,5 +1,4 @@
 import { config, db, json_response } from "../config.js";
-import DOMPurify from "isomorphic-dompurify";
 
 export async function handle_posts(req, method, pathname) {
   if (pathname === "/api/posts" && method === "POST") {
@@ -27,15 +26,11 @@ export async function handle_posts(req, method, pathname) {
         .replace(/[^a-z0-9а-яё\s]/g, "")
         .replace(/\s+/g, "-");
 
-      const clean_content = DOMPurify.sanitize(content);
-      const clean_title = DOMPurify.sanitize(title);
-      const clean_preview = DOMPurify.sanitize(preview);
-
       const query = db.prepare(`
         INSERT INTO posts (title, slug, preview, content) 
         VALUES (?, ?, ?, ?)
       `);
-      query.run(clean_title, slug, clean_preview, clean_content);
+      query.run(title, slug, preview, content);
 
       return json_response({ success: true }, 201);
     } catch (err) {

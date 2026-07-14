@@ -115,6 +115,16 @@ export const init_post_form = () => {
     }
   });
 
+  content_textarea.addEventListener("keydown", (e) => {
+    if (e.key === "Tab") {
+      e.preventDefault();
+      const start = content_textarea.selectionStart;
+      const end = content_textarea.selectionEnd;
+      content_textarea.value = content_textarea.value.substring(0, start) + "\t" + content_textarea.value.substring(end);
+      content_textarea.selectionStart = content_textarea.selectionEnd = start + 1;
+    }
+  });
+
   new_post_form.dataset.initialized = "true";
 };
 

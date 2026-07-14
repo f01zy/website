@@ -1,13 +1,10 @@
 {
   "name": "f01zy-website",
   "version": "1.0.0",
-  "type": "module",
   "main": "src/server/server.js",
   "scripts": {
     "start": "bun run src/server/server.js",
     "dev": "bun --watch src/server/server.js"
   },
-  "dependencies": {
-    "isomorphic-dompurify": "^3.18.0"
-  }
+  "type": "module"
 }
